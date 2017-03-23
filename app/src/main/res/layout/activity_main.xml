@@ -5,14 +5,62 @@
   android:id="@+id/activity_main"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:paddingBottom="@dimen/activity_vertical_margin"
-  android:paddingLeft="@dimen/activity_horizontal_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin"
-  android:paddingTop="@dimen/activity_vertical_margin"
-  tools:context="com.littlegnal.scrollablechart.MainActivity">
-
-  <TextView
-    android:layout_width="wrap_content"
+  tools:context="com.littlegnal.scrollablechart.MainActivity"
+  >
+  <LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Hello World!"/>
+    android:orientation="vertical"
+    >
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      >
+      <Button
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Line\nDrawing"
+        />
+      <Button
+        android:id="@+id/curve_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="CurveLine Drawing"
+        />
+      <Button
+        android:id="@+id/histogram"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Histogram Drawing"
+        />
+    </LinearLayout>
+    <com.littlegnal.scrollablechart.scrollablechartview.ScrollableChartView
+      android:id="@+id/view"
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+      android:layout_marginTop="30dp"
+      />
+    <TextView
+      android:id="@+id/index"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="18sp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="20dp"
+      />
+    <TextView
+      android:id="@+id/positionChange"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="18sp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="20dp"
+      />
+  </LinearLayout>
 </RelativeLayout>
