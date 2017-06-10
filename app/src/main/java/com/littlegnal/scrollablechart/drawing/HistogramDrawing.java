@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.provider.ContactsContract;
-import android.util.Log;
 
+import com.littlegnal.scrollablechart.scrollablechartview.ClickFilter;
 import com.littlegnal.scrollablechart.scrollablechartview.DataSourceProvider;
 
-public class HistogramDrawing extends DemoDrawing {
+public class HistogramDrawing extends DemoDrawing implements ClickFilter{
 
   private Paint mHistogramPaint;
 
@@ -105,5 +104,35 @@ public class HistogramDrawing extends DemoDrawing {
     b = (int)(sB + (eB - sB) * fraction);
 
     return a << 24 | r << 16 | g << 8 | b;
+  }
+
+  @Override
+  public int computeClickedPosition(
+      int viewWidth,
+      int viewHeight,
+      int itemSpace,
+      int currentPosition,
+      int touchSlop,
+      int upX,
+      int upY) {
+    float halfRectWith = itemSpace * RECT_RATIO / 2.0f;
+    int centerX = viewWidth / 2;
+    int upOffset = centerX - upX;
+    int touchRadius = (int) halfRectWith;
+    if (upOffset > 0) {
+      upOffset += touchRadius;
+    } else {
+      upOffset -= touchRadius;
+    }
+    int upOffsetCount = upOffset / itemSpace;
+    if (upOffsetCount != 0) {
+      int desPosition = currentPosition + upOffsetCount;
+      float drawY = getAdjustedYByIndex(viewHeight, desPosition);
+      if (upY > drawY && upY < viewHeight) {
+        return desPosition;
+      }
+    }
+
+    return currentPosition;
   }
 }

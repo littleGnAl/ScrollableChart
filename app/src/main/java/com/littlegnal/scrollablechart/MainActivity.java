@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     mPositionChangeTv = (TextView) findViewById(R.id.positionChange);
     mScrollableChartView = (ScrollableChartView) findViewById(R.id.view);
 
+    CurveLineDrawing curveLineDrawing = CurveLineDrawing.create(getApplicationContext(), mSource);
     ScrollableChartConfiguration.Builder builder = new ScrollableChartConfiguration.Builder()
-        .setDrawing(CurveLineDrawing.create(getApplicationContext(), mSource))
+        .setDrawing(curveLineDrawing)
+        .setClickFilter(curveLineDrawing)
         .setIsDefaultItemSpace(true)
         .setIsEnableClickScroll(true)
         .setVisibleCount(7);
@@ -67,13 +69,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.line:
-        mConfiguration.setDrawing(LineDrawing.create(mSource));
+        LineDrawing lineDrawing = LineDrawing.create(getApplicationContext(), mSource);
+        mConfiguration.setDrawing(lineDrawing);
+        mConfiguration.setClickFilter(lineDrawing);
         break;
       case R.id.curve_line:
-        mConfiguration.setDrawing(CurveLineDrawing.create(getApplicationContext(), mSource));
+        CurveLineDrawing curveLineDrawing =
+            CurveLineDrawing.create(getApplicationContext(), mSource);
+        mConfiguration.setDrawing(curveLineDrawing);
+        mConfiguration.setClickFilter(curveLineDrawing);
         break;
       case R.id.histogram:
-        mConfiguration.setDrawing(HistogramDrawing.create(getApplicationContext(), mSource));
+        HistogramDrawing histogramDrawing =
+            HistogramDrawing.create(getApplicationContext(), mSource);
+        mConfiguration.setDrawing(histogramDrawing);
+        mConfiguration.setClickFilter(histogramDrawing);
         break;
       default:
         break;
@@ -87,5 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private void scrollToBegin() {
     mScrollableChartView.scrollTo(0, 0);
     mScrollableChartView.postInvalidate();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    mScrollableChartView.clearOnPositionChangeListeners();
   }
 }

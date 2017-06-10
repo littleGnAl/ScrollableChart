@@ -14,6 +14,8 @@ public class ScrollableChartConfiguration {
 
   private Drawing mDrawing;
 
+  private ClickFilter mClickFilter;
+
   private boolean mIsDefaultItemSpace;
 
   private boolean mIsEnableClickScroll;
@@ -22,6 +24,7 @@ public class ScrollableChartConfiguration {
     mItemSpace = builder.mItemSpace;
     mVisibleCount = builder.mVisibleCount;
     mDrawing = builder.mDrawing;
+    mClickFilter = builder.mClickFilter;
     mDataSourceSize = mDrawing.getDataSourceProvider().getDataSourceSize();
     mIsDefaultItemSpace = builder.mIsDefaultItemSpace;
     mIsEnableClickScroll = builder.mIsEnableClickScroll;
@@ -64,6 +67,14 @@ public class ScrollableChartConfiguration {
     return mDrawing;
   }
 
+  public void setClickFilter(ClickFilter clickFilter) {
+    this.mClickFilter = clickFilter;
+  }
+
+  public ClickFilter getClickFilter() {
+    return this.mClickFilter;
+  }
+
   public int getDataSourceSize() {
     return mDataSourceSize;
   }
@@ -101,6 +112,8 @@ public class ScrollableChartConfiguration {
 
     private Drawing mDrawing;
 
+    private ClickFilter mClickFilter;
+
     private boolean mIsDefaultItemSpace;
 
     private boolean mIsEnableClickScroll;
@@ -117,6 +130,11 @@ public class ScrollableChartConfiguration {
 
     public Builder setDrawing(Drawing drawing) {
       this.mDrawing = drawing;
+      return this;
+    }
+
+    public Builder setClickFilter(ClickFilter clickFilter) {
+      this.mClickFilter = clickFilter;
       return this;
     }
 

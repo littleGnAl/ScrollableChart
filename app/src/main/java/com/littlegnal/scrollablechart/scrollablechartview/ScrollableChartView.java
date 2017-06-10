@@ -114,6 +114,8 @@ public class ScrollableChartView extends View {
 
   private List<OnPositionChangeListener> mOnPositionChangeListeners;
 
+  private ClickFilter mClickFilter;
+
   public ScrollableChartView(Context context) {
     this(context, null);
   }
@@ -275,7 +277,8 @@ public class ScrollableChartView extends View {
 
           // handle click
           int upX = (int) event.getX(mActivePointerId);
-          handleClick(upX);
+          int upY = (int) event.getY(mActivePointerId);
+          handleClick(upX, upY);
 
         }
         recycleVelocityTracker();
@@ -295,29 +298,32 @@ public class ScrollableChartView extends View {
     return true;
   }
 
-  private void handleClick(int upX) {
-    int centerX = getWidth() / 2;
-    int upOffset = centerX - upX;
-    if (upOffset > 0) {
-      upOffset += (mTouchSlop + getItemSpace() / 2);
-    } else {
-      upOffset -= (mTouchSlop + getItemSpace() / 2);
+  private void handleClick(int upX, int upY) {
+    if (mClickFilter == null) {
+      mClickFilter = new DefaultClickFilter();
     }
-    int upOffsetCount = upOffset / getItemSpace();
-    if (upOffsetCount != 0) {
-      int scrollToPosition = mCurrentPosition + upOffsetCount;
-      if (scrollToPosition >= 0) {
-        int scrollToX = -(scrollToPosition * getItemSpace());
+
+    int desPosition = mClickFilter.computeClickedPosition(
+        getWidth(),
+        getHeight(),
+        getItemSpace(),
+        mCurrentPosition,
+        mTouchSlop,
+        upX,
+        upY);
+
+    if (desPosition - mCurrentPosition != 0 && desPosition >= 0) {
+      if (mOnItemClickListener != null) {
+        mOnItemClickListener.onClick(this, desPosition);
+      }
+
+      if (mIsEnableClickScroll) {
+        int scrollToX = -(desPosition * getItemSpace());
         scrollToX -= getScrollX();
         if (scrollToX != 0) {
-          if (mIsEnableClickScroll) {
-            smoothScrollTo(scrollToX, 0);
-            postInvalidate();
-          }
+          smoothScrollTo(scrollToX, 0);
+          postInvalidate();
 
-          if (mOnItemClickListener != null) {
-            mOnItemClickListener.onClick(this, scrollToPosition);
-          }
         }
       }
     } else {
@@ -491,6 +497,7 @@ public class ScrollableChartView extends View {
     }
     reset();
     this.mDrawing = configuration.getDrawing();
+    this.mClickFilter = configuration.getClickFilter();
     this.mDataSourceSize = configuration.getDataSourceSize();
     this.mVisibleCount = configuration.getVisibleCount();
     this.mIsDefaultItemSpace = configuration.isDefaultItemSpace();

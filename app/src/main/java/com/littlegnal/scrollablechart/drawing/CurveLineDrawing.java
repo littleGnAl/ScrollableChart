@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 
+import com.littlegnal.scrollablechart.scrollablechartview.ClickFilter;
 import com.littlegnal.scrollablechart.scrollablechartview.DataSourceProvider;
-import com.littlegnal.scrollablechart.scrollablechartview.Drawing;
 
-public class CurveLineDrawing extends DemoDrawing {
+public class CurveLineDrawing extends DemoDrawing implements ClickFilter {
 
   private Path mCurvePath;
 
@@ -116,5 +115,32 @@ public class CurveLineDrawing extends DemoDrawing {
     return ratio * offset + startRadius;
   }
 
+  @Override
+  public int computeClickedPosition(
+      int viewWidth,
+      int viewHeight,
+      int itemSpace,
+      int currentPosition,
+      int touchSlop,
+      int upX,
+      int upY) {
+    int centerX = viewWidth / 2;
+    int upOffset = centerX - upX;
+    int touchRadius = (int) SELECTED_CIRCLE_RADIUS;
+    if (upOffset > 0) {
+      upOffset += touchRadius;
+    } else {
+      upOffset -= touchRadius;
+    }
+    int upOffsetCount = upOffset / itemSpace;
+    if (upOffsetCount != 0) {
+      int desPosition = currentPosition + upOffsetCount;
+      float drawY = getAdjustedYByIndex(viewHeight, desPosition);
+      if (upY > drawY - touchRadius && upY < drawY + touchRadius) {
+        return desPosition;
+      }
+    }
 
+    return currentPosition;
+  }
 }
