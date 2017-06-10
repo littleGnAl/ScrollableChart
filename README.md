@@ -48,7 +48,33 @@ ScrollableChartConfiguration.Builder builder = new ScrollableChartConfiguration.
     ...
   }
 }
+ ```
+ Sometimes you may want to implement your own touch logic to trigger the click event, which often need to touch on a specific area, such, touch the circle area in the curve line chart, touch the bubble in the line chart, or touch the histogram in the histogram chart in the demo drawing. So you can implement your own touch logic by implement the `ClickFilter` interface like the `DefaultClickFilter`.
+ ```java
+ class DefaultClickFilter implements ClickFilter{
 
+  @Override
+  public int computeClickedPosition(
+      int viewWidth,
+      int viewHeight,
+      int itemSpace,
+      int currentPosition,
+      int touchSlop,
+      int upX,
+      int upY) {
+    int centerX = viewWidth / 2;
+    int upOffset = centerX - upX;
+    // Adjust the touch radius, the radius of the default implementation is touchSlop
+    if (upOffset > 0) {
+      upOffset += touchSlop;
+    } else {
+      upOffset -= touchSlop;
+    }
+    int upOffsetCount = upOffset / itemSpace;
+
+    return upOffsetCount != 0 ? currentPosition + upOffsetCount : currentPosition;
+  }
+}
  ```
 # Contribute
 Welcome for issues or PR
