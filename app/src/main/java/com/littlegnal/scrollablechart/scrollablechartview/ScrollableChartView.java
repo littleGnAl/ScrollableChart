@@ -66,12 +66,15 @@ public class ScrollableChartView extends View {
 
   private Drawing mDrawing;
 
-  private int mDataSourceSize;
+  /**
+   * The default visible count on the screen
+   */
+  private final int DEFAULT_VISIBLE_COUNT = 7;
 
   /**
    * The visible count on the screen
    */
-  private int mVisibleCount;
+  private int mVisibleCount = DEFAULT_VISIBLE_COUNT;
 
   private int mItemSpace = -1;
 
@@ -476,7 +479,9 @@ public class ScrollableChartView extends View {
    * @return The total item count of data source
    */
   private int getDataSourceSize() {
-    return mDataSourceSize;
+    DataSourceProvider dataSourceProvider = mDrawing.getDataSourceProvider();
+    if (dataSourceProvider == null) return 0;
+    return dataSourceProvider.getDataSourceSize();
   }
 
   /**
@@ -498,7 +503,7 @@ public class ScrollableChartView extends View {
     reset();
     this.mDrawing = configuration.getDrawing();
     this.mClickFilter = configuration.getClickFilter();
-    this.mDataSourceSize = configuration.getDataSourceSize();
+//    this.mDataSourceProvider = mDrawing.getDataSourceProvider();
     this.mVisibleCount = configuration.getVisibleCount();
     this.mIsDefaultItemSpace = configuration.isDefaultItemSpace();
     if (!mIsDefaultItemSpace) {

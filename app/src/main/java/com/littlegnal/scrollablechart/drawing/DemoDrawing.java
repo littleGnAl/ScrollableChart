@@ -3,7 +3,6 @@ package com.littlegnal.scrollablechart.drawing;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 
 import com.littlegnal.scrollablechart.scrollablechartview.DataSourceProvider;

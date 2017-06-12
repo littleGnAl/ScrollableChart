@@ -34,7 +34,7 @@ public abstract class AbstractDrawing implements Drawing {
   }
 
   protected float getAdjustedYByIndex(int height, int index) {
-    float value = mDataSourceProvider.getValueByIndex(index);
+    float value = (float) mDataSourceProvider.getValueByIndex(index);
     float ratio = value / 100.0f;
     return height - height * ratio;
   }

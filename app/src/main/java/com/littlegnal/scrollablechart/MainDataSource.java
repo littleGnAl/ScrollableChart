@@ -4,24 +4,23 @@ import com.littlegnal.scrollablechart.scrollablechartview.DataSourceProvider;
 
 import java.util.Random;
 
-public class MainDataSource implements DataSourceProvider {
+public class MainDataSource implements DataSourceProvider<Float> {
 
   private float[] mSource;
 
-  private final int SIZE = 1000;
-
   public MainDataSource() {
-    mSource = new float[SIZE];
+    int size = 1000;
+    mSource = new float[size];
     float max = 0.8f;
     float min = 0.5f;
     Random random = new Random();
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < size; i++) {
       mSource[i] = (random.nextFloat() % (max - min) + min) * 100.0f;
     }
   }
 
   @Override
-  public float getValueByIndex(int index) {
+  public Float getValueByIndex(int index) {
     if (index < 0 || index >= mSource.length) {
       throw new IndexOutOfBoundsException();
     }
@@ -30,6 +29,6 @@ public class MainDataSource implements DataSourceProvider {
 
   @Override
   public int getDataSourceSize() {
-    return SIZE;
+    return mSource.length;
   }
 }
